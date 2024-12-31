@@ -28,11 +28,29 @@ vector<int> bubbleSort(vector<int> arr) {
 
 	cout << "연산 횟수: " << count << "\n";
 	return arr;
-} // 
+} // 버블 정렬
+
+vector<int> selectionSort(vector<int> arr) {
+	int count = 0;
+	for (int i = 0; i < arr.size() - 1; i++) {
+		int minIndex = i;
+		for (int j = i + 1; j < arr.size(); j++) {
+			count++;
+			if (arr[j] < arr[minIndex]) {
+				minIndex = j;
+			}
+		}
+		if (minIndex != i)
+			swap(arr[i], arr[minIndex]);
+	}
+	cout << "연산 횟수: " << count << "\n";
+	return arr;
+}
 
 int main() {
-	vector<int>arr = initSetting(100000/2, 1, 1000);
-	vector<int>sortedArr = bubbleSort(arr);
+	vector<int>arr = initSetting(1000, 1, 1000);
+	//vector<int>sortedArr = bubbleSort(arr);
+	vector<int>sortedArr = selectionSort(arr);
 
 	for (const auto& num : sortedArr) {
 		cout << num << "\n" << "";
