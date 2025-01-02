@@ -6,6 +6,8 @@
 
 using namespace std;
 
+int mergeCount = 0; // merge sort 임시 카운트. 클래스로 변환 후 삭제 예정
+
 vector<int> initSetting(int size, int min, int max) {
 	vector<int> arr;
 
@@ -65,7 +67,32 @@ vector<int> insertionSort(vector<int>arr) {
 	return arr;
 }// 삽입 정렬
 
-
+vector<int> merge(const vector<int>& leftArr, const vector<int>& rightArr) {
+	vector<int> mergeArr;
+	int i = 0, j = 0; // i는 leftArr에 사용, j는 rightArr에 사용.
+	
+	while (i < leftArr.size() && j< rightArr.size()) {
+		mergeCount++;
+		
+		if (leftArr[i]<=rightArr[j]) {
+			mergeArr.push_back(leftArr[i]);
+			i++;
+		}
+		else {
+			mergeArr.push_back(rightArr[j]);
+			j++;
+		}
+	}
+	while (i < leftArr.size()) {
+		mergeArr.push_back(leftArr[i]);
+		i++;
+	}
+	while (j < rightArr.size()) {
+		mergeArr.push_back(rightArr[j]);
+		j++;
+	}
+	return mergeArr;
+}
 
 vector<int> mergeSortTopDown(vector<int>& arr) {
 	if (arr.size() <= 1)
@@ -82,12 +109,13 @@ vector<int> mergeSortTopDown(vector<int>& arr) {
 }
 
 int main() {
-	vector<int>arr = initSetting(1000, 1, 1000);
+	vector<int>arr = initSetting(1000000, 1, 1000);
 	//vector<int>sortedArr = bubbleSort(arr);
 	//vector<int>sortedArr = selectionSort(arr);
-	vector<int>sortedArr = insertionSort(arr);
-
+	//vector<int>sortedArr = insertionSort(arr);
+	vector<int>sortedArr = mergeSortTopDown(arr);
 	for (const auto& num : sortedArr) {
 		cout << num << "\n" << "";
 	}
+	cout << "연산 횟수: " << mergeCount << "\n";
 }
