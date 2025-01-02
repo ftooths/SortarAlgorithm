@@ -63,6 +63,22 @@ vector<int> insertionSort(vector<int>arr) {
 	}
 	cout << "연산 횟수: " << count << "\n";
 	return arr;
+}// 삽입 정렬
+
+
+
+vector<int> mergeSortTopDown(vector<int>& arr) {
+	if (arr.size() <= 1)
+		return arr;
+
+	int mid = arr.size() / 2;
+	vector<int> leftArr(arr.begin(), arr.begin() + mid);
+	vector<int> rightArr(arr.begin() + mid, arr.end());
+
+	vector<int> sortedLaft = mergeSortTopDown(leftArr);
+	vector<int> sortedRight= mergeSortTopDown(rightArr);
+
+	return merge(sortedLaft, sortedRight);
 }
 
 int main() {
