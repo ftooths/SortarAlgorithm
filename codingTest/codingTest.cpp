@@ -108,14 +108,58 @@ vector<int> mergeSortTopDown(vector<int>& arr) {
 	return merge(sortedLaft, sortedRight);
 }
 
+vector<int> mergeSortBottomUp(vector<int>& arr) {
+	int arrSize = arr.size();
+	int count = 0;
+
+	for (int size = 1; size < arrSize; size *= 2) {
+		for (int leftStart = 0; leftStart < arrSize - size; leftStart += 2 * size) { 
+			int mid = min(leftStart + size - 1, arrSize - 1);
+			int rightEnd = min(leftStart + 2 * size - 1, arrSize - 1);
+
+			vector<int> leftArr(arr.begin() + leftStart, arr.begin() + mid + 1);
+			vector<int> rightArr(arr.begin() + mid + 1, arr.begin() + rightEnd + 1);
+
+			int i = 0, j = 0, k = leftStart;
+			while (i < leftArr.size() && j < rightArr.size()) {
+				count++; 
+				if (leftArr[i] <= rightArr[j]) {
+					arr[k++] = leftArr[i++];
+				}
+				else {
+					arr[k++] = rightArr[j++];
+				}
+			}
+			while (i < leftArr.size()) {
+				arr[k++] = leftArr[i++];
+			}
+			while (j < rightArr.size()) {
+				arr[k++] = rightArr[j++];
+			}
+		}
+	}
+	cout << "연산 횟수: " << count << "\n"; 
+	return arr;
+}
+
+
 int main() {
-	vector<int>arr = initSetting(1000000, 1, 1000);
+	vector<int>arr = initSetting(10000, 1, 1000);
 	//vector<int>sortedArr = bubbleSort(arr);
 	//vector<int>sortedArr = selectionSort(arr);
 	//vector<int>sortedArr = insertionSort(arr);
-	vector<int>sortedArr = mergeSortTopDown(arr);
+	//vector<int>sortedArr = mergeSortTopDown(arr);
+	vector<int>sortedArr = mergeSortBottomUp(arr);
+
 	for (const auto& num : sortedArr) {
 		cout << num << "\n" << "";
 	}
-	cout << "연산 횟수: " << mergeCount << "\n";
+	//cout << "연산 횟수: " << mergeCount << "\n";
 }
+
+/*
+	예상치 못한 상황 목록
+	1. count 횟수 출력이 안됨.
+	배열 출력하는 연산이 너무 많아 원소가 10000일 때 기준으로 99 이하는 표기가 안됨.
+	그 위에 뭍혀 있음. 추후 클래스로 수정 때, 카운터 횟수 저장 기능 따로 만들 예정
+*/
