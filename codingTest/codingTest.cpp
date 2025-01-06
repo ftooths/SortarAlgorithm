@@ -142,14 +142,44 @@ vector<int> mergeSortBottomUp(vector<int>& arr) {
 	return arr;
 }
 
+int partition(vector<int>& arr, int low, int high, int& count) {
+	int pivot = arr[high];
+	int i = low - 1;
+
+	for (int j = low; j < high; j++) {
+		count++;
+		if (arr[j] <= pivot) {
+			i++;
+			swap(arr[i], arr[j]);
+		}
+	}
+	swap(arr[i + 1], arr[high]);
+	return i + 1;
+}
+
+void quickSortRecursive(vector<int>& arr, int low, int high, int& count) {
+	if (low < high) {
+		int pi = partition(arr, low, high, count);
+		quickSortRecursive(arr, low, pi - 1, count);
+		quickSortRecursive(arr, pi + 1, high, count);
+	}
+}
+
+vector<int> quickSort(vector<int> arr) {
+	int count = 0;
+	quickSortRecursive(arr, 0, arr.size() - 1, count);
+	cout << "연산 횟수:" << count << "\n";
+	return arr;
+}
 
 int main() {
-	vector<int>arr = initSetting(10000, 1, 1000);
+	vector<int>arr = initSetting(1000000, 1, 1000);
 	//vector<int>sortedArr = bubbleSort(arr);
 	//vector<int>sortedArr = selectionSort(arr);
 	//vector<int>sortedArr = insertionSort(arr);
 	//vector<int>sortedArr = mergeSortTopDown(arr);
-	vector<int>sortedArr = mergeSortBottomUp(arr);
+	//vector<int>sortedArr = mergeSortBottomUp(arr);
+	vector<int>sortedArr = quickSort(arr);
 
 	for (const auto& num : sortedArr) {
 		cout << num << "\n" << "";
