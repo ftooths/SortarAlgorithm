@@ -172,14 +172,51 @@ vector<int> quickSort(vector<int> arr) {
 	return arr;
 }
 
+void heapify(vector<int>& arr, int n, int i, int& count) {
+	int largest = i;
+	int left = 2 * i + 1;
+	int right = 2 * i + 2;
+
+	count++;
+	if (left < n && arr[left] > arr[largest])
+		largest = left;
+
+	count++;
+	if (right < n && arr[right] > arr[largest])
+		largest = right;
+
+	if (largest != i) {
+		swap(arr[i], arr[largest]);
+		heapify(arr, n, largest, count);
+	}
+}
+vector<int> heapSort(vector<int>& arr) {
+	int count = 0;
+	int n = arr.size();
+
+	for (int i = n / 2 - 1; i >= 0; i--) {
+		heapify(arr, n, i, count);
+	}
+
+	for (int i = n - 1; i > 0; i--) {
+		swap(arr[0], arr[i]);
+		heapify(arr, i, 0, count);
+	}
+
+	cout << "연산 횟수: " << count << "\n";
+	return arr;
+}
+
 int main() {
-	vector<int>arr = initSetting(1000000, 1, 1000);
+	vector<int>arr = initSetting(1000, 1, 1000);
 	//vector<int>sortedArr = bubbleSort(arr);
 	//vector<int>sortedArr = selectionSort(arr);
 	//vector<int>sortedArr = insertionSort(arr);
 	//vector<int>sortedArr = mergeSortTopDown(arr);
 	//vector<int>sortedArr = mergeSortBottomUp(arr);
-	vector<int>sortedArr = quickSort(arr);
+	//vector<int>sortedArr = quickSort(arr);
+	vector<int>sortedArr = heapSort(arr);
+
 
 	for (const auto& num : sortedArr) {
 		cout << num << "\n" << "";
