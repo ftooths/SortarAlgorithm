@@ -9,7 +9,7 @@ class Sort {
 private:
 	int count;
 	std::vector<int> arr;
-
+	std::vector<int> arrBackUp;
 	std::vector<int> merge(const std::vector<int>& leftArr, const std::vector<int>& rightArr);
 	std::vector<int> mergeSortTopDownRecursive(std::vector<int>& arr);
 	int partition(std::vector<int>& arr, int low, int high);
