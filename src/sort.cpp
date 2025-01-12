@@ -19,9 +19,9 @@ void Sort::shuffleArray() {
 
 void Sort::printArray() const {
     for (const int& num : arr) {
-        cout << num << " ";
+        cout << num << " " << endl;
+
     }
-    cout << endl;
 }
 
 void Sort::bubbleSort() {
@@ -69,4 +69,146 @@ void Sort::insertionSort() {
         arr[j + 1] = key;
     }
     cout << "»ðÀÔ Á¤·Ä ¿¬»ê È½¼ö: " << count << endl;
+}
+
+vector<int> Sort::merge(const vector<int>& leftArr, const vector<int>& rightArr) {
+    vector<int> mergeArr;
+    int i = 0, j = 0; 
+    while (i < leftArr.size() && j < rightArr.size()) {
+        count++;
+        if (leftArr[i] <= rightArr[j]) {
+            mergeArr.push_back(leftArr[i]);
+            i++;
+        }
+        else {
+            mergeArr.push_back(rightArr[j]);
+            j++;
+        }
+    }
+    while (i < leftArr.size()) {
+        mergeArr.push_back(leftArr[i]);
+        i++;
+    }
+    while (j < rightArr.size()) {
+        mergeArr.push_back(rightArr[j]);
+        j++;
+    }
+    return mergeArr;
+}
+
+vector<int> Sort::mergeSortTopDownRecursive(std::vector<int>& subArr) {
+    if (subArr.size() <= 1) {
+        return subArr;
+    }
+
+    int mid = subArr.size() / 2;
+    std::vector<int> leftArr(subArr.begin(), subArr.begin() + mid);
+    std::vector<int> rightArr(subArr.begin() + mid, subArr.end());
+
+    std::vector<int> sortedLeft = mergeSortTopDownRecursive(leftArr);
+    std::vector<int> sortedRight = mergeSortTopDownRecursive(rightArr);
+
+    return merge(sortedLeft, sortedRight);
+}
+
+void Sort::mergeSortTopDown() {
+    count = 0; 
+    arr = mergeSortTopDownRecursive(arr);
+    cout << "º´ÇÕ Á¤·Ä (Top-Down) ¿¬»ê È½¼ö: " << count << endl;
+}
+
+void Sort::mergeSortBottomUp() {
+    count = 0; 
+    int n = arr.size();
+    for (int size = 1; size < n; size *= 2) {
+        for (int leftStart = 0; leftStart < n - size; leftStart += 2 * size) {
+            int mid = std::min(leftStart + size - 1, n - 1);
+            int rightEnd = std::min(leftStart + 2 * size - 1, n - 1);
+
+            std::vector<int> leftArr(arr.begin() + leftStart, arr.begin() + mid + 1);
+            std::vector<int> rightArr(arr.begin() + mid + 1, arr.begin() + rightEnd + 1);
+
+            int i = 0, j = 0, k = leftStart;
+            while (i < leftArr.size() && j < rightArr.size()) {
+                count++;
+                if (leftArr[i] <= rightArr[j]) {
+                    arr[k++] = leftArr[i++];
+                }
+                else {
+                    arr[k++] = rightArr[j++];
+                }
+            }
+            while (i < leftArr.size()) {
+                arr[k++] = leftArr[i++];
+            }
+            while (j < rightArr.size()) {
+                arr[k++] = rightArr[j++];
+            }
+        }
+    }
+    cout << "º´ÇÕ Á¤·Ä (Bottom-Up) ¿¬»ê È½¼ö: " << count << endl;
+}
+
+int Sort::partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        count++;
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void Sort::quickSortRecursive(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSortRecursive(arr, low, pi - 1);
+        quickSortRecursive(arr, pi + 1, high);
+    }
+}
+
+void Sort::quickSort() {
+    count = 0;
+    quickSortRecursive(arr, 0, arr.size() - 1);
+    cout << "Äü Á¤·Ä ¿¬»ê È½¼ö: " << count << endl;
+}
+
+void Sort::heapify(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    count++;
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    count++;
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void Sort::heapSort() {
+    count = 0;
+    int n = arr.size();
+
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+
+    cout << "Èü Á¤·Ä ¿¬»ê È½¼ö: " << count << endl;
 }
